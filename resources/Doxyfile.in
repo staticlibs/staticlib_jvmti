@@ -1,0 +1,29 @@
+# Copyright 2017, alex at staticlibs.net
+#
+# This code is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 2 only, as
+# published by the Free Software Foundation.
+#
+# This code is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# version 2 for more details (a copy is included in the LICENSE.md file that
+# accompanied this code).
+
+# Doxyfile 1.8.1.2
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = ${PROJECT_NAME}
+PROJECT_NUMBER         = ${${PROJECT_NAME}_STATICLIB_VERSION}
+PROJECT_LOGO           = ${CMAKE_CURRENT_LIST_DIR}/resources/logo.png
+OUTPUT_DIRECTORY       = ${CMAKE_CURRENT_BINARY_DIR}/docs
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = ${CMAKE_CURRENT_LIST_DIR}/include/
+STRIP_FROM_INC_PATH    = ${CMAKE_CURRENT_LIST_DIR}/include/
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+JAVADOC_AUTOBRIEF      = YES
+INPUT                  = ${CMAKE_CURRENT_LIST_DIR}/include
+INPUT_ENCODING         = UTF-8
+RECURSIVE              = YES
+GENERATE_LATEX         = NO
