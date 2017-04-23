@@ -22,13 +22,11 @@
 #ifndef STATICLIB_JVMTI_HPP
 #define	STATICLIB_JVMTI_HPP
 
-#include <jni.h>
-#include <jvmti.h>
-
 #include "staticlib/config.hpp"
 
 #include "staticlib/jvmti/agent_base.hpp"
 #include "staticlib/jvmti/error_checker.hpp"
+#include "staticlib/jvmti/jmm_ptr.hpp"
 #include "staticlib/jvmti/jvmti_env_ptr.hpp"
 #include "staticlib/jvmti/jvmti_exception.hpp"
 

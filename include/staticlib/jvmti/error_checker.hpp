@@ -22,8 +22,8 @@
 #ifndef STATICLIB_JVMTI_ERROR_CHECKER_HPP
 #define	STATICLIB_JVMTI_ERROR_CHECKER_HPP
 
-#include <jni.h>
-#include <jvmti.h>
+#include "jni.h"
+#include "jvmti.h"
 
 #include "staticlib/config.hpp"
 #include "staticlib/support.hpp"

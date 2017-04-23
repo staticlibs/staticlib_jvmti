@@ -22,15 +22,17 @@
 #ifndef STATICLIB_JVMTI_JVMTI_ENV_PTR_HPP
 #define	STATICLIB_JVMTI_JVMTI_ENV_PTR_HPP
 
-#include <jni.h>
-#include <jvmti.h>
-
 #include <functional>
 #include <memory>
+
+#include "jni.h"
+#include "jvmti.h"
 
 #include "staticlib/config.hpp"
 #include "staticlib/jni.hpp"
 #include "staticlib/support.hpp"
+
+#include "staticlib/jvmti/jvmti_exception.hpp"
 
 namespace staticlib {
 namespace jvmti {

@@ -50,6 +50,14 @@ add_custom_target ( ${PROJECT_NAME} SOURCES ${${PROJECT_NAME}_HEADERS} )
 
 # pkg-config
 set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/include" )
+# todo: toolchain autodetect
+if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
+    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/include/linux" )
+elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/include/windows" )
+elseif ( STATICLIB_TOOLCHAIN MATCHES "macosx_[^_]+_[^_]+" )
+    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/include/macosx" )
+endif ( )
 staticlib_jvmti_list_to_string ( ${PROJECT_NAME}_PC_REQUIRES "" ${PROJECT_NAME}_DEPS )
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/${PROJECT_NAME}.pc )

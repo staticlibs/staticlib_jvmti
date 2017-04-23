@@ -22,11 +22,11 @@
 #ifndef STATICLIB_JVMTI_AGENT_BASE_HPP
 #define	STATICLIB_JVMTI_AGENT_BASE_HPP
 
-#include <jni.h>
-#include <jvmti.h>
-
 #include <string>
 #include <thread>
+
+#include "jni.h"
+#include "jvmti.h"
 
 #include "staticlib/config.hpp"
 #include "staticlib/jni.hpp"
@@ -34,6 +34,7 @@
 
 #include "staticlib/jvmti/error_checker.hpp"
 #include "staticlib/jvmti/jvmti_env_ptr.hpp"
+#include "staticlib/jvmti/jmm_ptr.hpp"
 #include "staticlib/jvmti/jvmti_exception.hpp"
 
 namespace staticlib {
@@ -42,20 +43,24 @@ namespace jvmti {
 template<typename T> class agent_base {
 protected:
     jvmti_env_ptr jvmti;
+    jmm_ptr jmm;
     std::string options;
     std::thread worker;
 
     agent_base(JavaVM* javavm, char* options) :
     jvmti(javavm),
+    jmm(nullptr),
     options(nullptr != options ? options : "") {
+        // init global jvm pointer
+        sl::jni::static_java_vm(javavm);
         register_vminit_callback();
         apply_capabilities();
         // start worker
         this->worker = std::thread([this, javavm] {
-            // init global jvm pointer
-            sl::jni::static_java_vm(javavm);
             // wait for init
             sl::jni::static_java_vm().await_init_complete();
+            // init JMM
+            this->jmm = jmm_ptr();
             // call inheritor
             static_cast<T*> (this)->operator()();
         });
@@ -66,7 +71,6 @@ protected:
     void operator=(const agent_base&) = delete;
 
     // virtual is unnecessary
-
     ~agent_base() STATICLIB_NOEXCEPT {
         sl::jni::static_java_vm().notify_shutdown();
         worker.join();
