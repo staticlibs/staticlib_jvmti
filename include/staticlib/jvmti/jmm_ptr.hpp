@@ -71,6 +71,9 @@ public:
     sl::jni::jobject_ptr call_object_method(const sl::jni::jclass_ptr& resclass, Func func, Args... args) {
         auto scoped = sl::jni::thread_local_jni_env_ptr();
         jobject local = call_method<jobject>(func, args...);
+        if (nullptr == local) {
+            throw jvmti_exception(TRACEMSG("Invalid null object returned by JMM method"));
+        }
         return sl::jni::jobject_ptr(resclass, local);
     }
 };
