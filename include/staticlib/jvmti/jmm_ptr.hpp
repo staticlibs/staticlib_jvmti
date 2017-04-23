@@ -55,6 +55,24 @@ public:
     JmmInterface* get() {
         return jmm.get();
     }
+
+    template<typename Result, typename Func, typename... Args>
+    Result call_method(Func func, Args... args) {
+        auto env = sl::jni::thread_local_jni_env_ptr();
+        Result res = (jmm.get()->*func)(env.get(), args...);
+        if (env->ExceptionCheck()) {
+            env->ExceptionClear();
+            throw jvmti_exception(TRACEMSG("Exception raised when calling JMM method"));
+        }
+        return res;
+    }
+
+    template<typename Func, typename... Args>
+    sl::jni::jobject_ptr call_object_method(const sl::jni::jclass_ptr& resclass, Func func, Args... args) {
+        auto scoped = sl::jni::thread_local_jni_env_ptr();
+        jobject local = call_method<jobject>(func, args...);
+        return sl::jni::jobject_ptr(resclass, local);
+    }
 };
 
 } // namespace
