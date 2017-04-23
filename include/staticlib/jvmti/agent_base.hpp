@@ -42,27 +42,34 @@ namespace jvmti {
 
 template<typename T> class agent_base {
 protected:
+    bool early_init;
     jvmti_env_ptr jvmti;
     jmm_ptr jmm;
     std::string options;
     std::thread worker;
 
     agent_base(JavaVM* javavm, char* options) :
-    jvmti(javavm),
+    early_init([javavm]{
+        // init global jvm pointer as early as possible
+        sl::jni::static_java_vm(javavm);
+        return true;
+    }()),
+    jvmti(),
     jmm(nullptr),
     options(nullptr != options ? options : "") {
-        // init global jvm pointer
-        sl::jni::static_java_vm(javavm);
+        // init global jvm pointer        
         register_vminit_callback();
         apply_capabilities();
         // start worker
-        this->worker = std::thread([this, javavm] {
+        this->worker = std::thread([this] {
             // wait for init
             sl::jni::static_java_vm().await_init_complete();
-            // init JMM
-            this->jmm = jmm_ptr();
-            // call inheritor
-            static_cast<T*> (this)->operator()();
+            if (sl::jni::static_java_vm().init_complete()) {
+                // init JMM
+                this->jmm = jmm_ptr();
+                // call inheritor
+                static_cast<T*> (this)->operator()();
+            }
         });
     }
 

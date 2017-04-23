@@ -41,17 +41,18 @@ class jvmti_env_ptr {
     std::unique_ptr<jvmtiEnv, std::function<void(jvmtiEnv*)>> jvmti;
 
 public:
-    jvmti_env_ptr(JavaVM* jvm) :
-    jvmti([jvm] {
+    jvmti_env_ptr() :
+    jvmti([] {
         sl::jni::error_checker ec;
         jvmtiEnv* env;
-        ec = jvm->GetEnv(reinterpret_cast<void**> (std::addressof(env)), JVMTI_VERSION);
-        return std::unique_ptr<jvmtiEnv, std::function<void(jvmtiEnv*)>>(env, [jvm](jvmtiEnv * ptr) {
-            // pass captured jvm pointer in case of destruction before global jvm pointer init
-            auto scoped_jni = sl::jni::thread_local_jni_env_ptr(jvm);
-            // lets crash early on error
-            error_checker ec;
-            ec = ptr->DisposeEnvironment();
+        ec = sl::jni::static_java_vm()->GetEnv(reinterpret_cast<void**> (std::addressof(env)), JVMTI_VERSION);
+        return std::unique_ptr<jvmtiEnv, std::function<void(jvmtiEnv*)>>(env, [](jvmtiEnv* ptr) {
+            if (sl::jni::static_java_vm().init_complete()) {
+                auto scoped_jni = sl::jni::thread_local_jni_env_ptr();
+                // lets crash early on error
+                error_checker ec;
+                ec = ptr->DisposeEnvironment();
+            } // AttachCurrentThread will crash if init is interrupted
         });
     }()) { }
 
