@@ -65,6 +65,9 @@ protected:
             // wait for init
             sl::jni::static_java_vm().await_init_complete();
             if (sl::jni::static_java_vm().init_complete()) {
+                // attach current thread to JVM
+                // see: https://bugs.openjdk.java.net/browse/JDK-6404306?focusedCommentId=12313688&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-12313688
+                auto scoped = sl::jni::thread_local_jni_env_ptr();
                 // init JMM
                 this->jmm = jmm_ptr();
                 // call inheritor
