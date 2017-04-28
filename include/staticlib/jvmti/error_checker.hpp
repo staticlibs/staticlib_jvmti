@@ -33,8 +33,20 @@
 namespace staticlib {
 namespace jvmti {
 
+/**
+ * Helper class that can be used to receive the resulting value from functions,
+ * that return JVMTI error codes. 
+ */
 class error_checker {
 public:
+
+    /**
+     * JVMTI error code value is checked on assignment.
+     * `jvmti_exception` is thrown if input value is not equal to `JVMTI_ERROR_NONE`
+     * 
+     * @param err JNI error code to check
+     * @throws jni_exception
+     */
     void operator=(jvmtiError err) {
         if (JVMTI_ERROR_NONE != err) {
             throw jvmti_exception(TRACEMSG("JVMTI error code: [" + sl::support::to_string(err) + "]"));

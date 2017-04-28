@@ -37,10 +37,19 @@
 namespace staticlib {
 namespace jvmti {
 
+/**
+ * Smart pointer that wraps `jvmtiEnv` pointer.
+ * Can be shared between threads. `jvmtiEnv` is disposed on destruction.
+ */
 class jvmti_env_ptr {
     std::unique_ptr<jvmtiEnv, std::function<void(jvmtiEnv*)>> jvmti;
 
 public:
+    /**
+     * Constructor, obtains `jvmtiEnv` pointer from global JVM pointer
+     * 
+     * @throws jvmti_exception
+     */
     jvmti_env_ptr() :
     jvmti([] {
         sl::jni::error_checker ec;
@@ -56,22 +65,49 @@ public:
         });
     }()) { }
 
+    /**
+     * Deleted copy constructor
+     */
     jvmti_env_ptr(const jvmti_env_ptr&) = delete;
 
+    /**
+     * Deleted copy assignment operator
+     */
     jvmti_env_ptr& operator=(const jvmti_env_ptr&) = delete;
 
+    /**
+     * Move constructor
+     * 
+     * @param other other instance
+     */
     jvmti_env_ptr(jvmti_env_ptr&& other) :
     jvmti(std::move(other.jvmti)) { }
 
+    /**
+     * Move assignment operator
+     * 
+     * @param other other instance
+     * @return this instance
+     */
     jvmti_env_ptr& operator=(jvmti_env_ptr&& other) {
         jvmti = std::move(other.jvmti);
         return *this;
     }
 
+    /**
+     * Provides access to `jvmtiEnv` pointer
+     * 
+     * @returns pointer to `jvmtiEnv`
+     */
     jvmtiEnv* operator->() {
         return jvmti.get();
     }
 
+    /**
+     * Provides access to `jvmtiEnv` pointer
+     * 
+     * @returns pointer to `jvmtiEnv`
+     */
     jvmtiEnv* get() {
         return jvmti.get();
     }

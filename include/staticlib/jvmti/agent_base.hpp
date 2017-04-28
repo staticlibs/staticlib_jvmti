@@ -40,14 +40,40 @@
 namespace staticlib {
 namespace jvmti {
 
+/**
+ * Base class template for JVMTI agents. Needs to be inherited using CRTP.
+ * Inheritor needs to implement `operator()` and optionally `capabilities()` method.
+ * `operator()` will be called after full JVM initialization from spawned thread
+ * that is already attached to JVM. On shutdow all threads, possibly spawned by inheritor,
+ * must be joined before exiting `operator()` method.
+ */
 template<typename T> class agent_base {
-protected:
     bool early_init;
+    
+protected:
+    /**
+     * JVMTI environment
+     */
     jvmti_env_ptr jvmti;
+    /**
+     * JMM pointer
+     */
     jmm_ptr jmm;
+    /**
+     * Input options passed to agent
+     */
     std::string options;
+    /**
+     * Thread that is used to invoke `operator()`
+     */
     std::thread worker;
 
+    /**
+     * Constructor
+     * 
+     * @param javavm pointer to JVM
+     * @param options input options passed to agent
+     */
     agent_base(JavaVM* javavm, char* options) :
     early_init([javavm]{
         // init global jvm pointer as early as possible
@@ -76,16 +102,33 @@ protected:
         });
     }
 
+    /**
+     * Deleted copy constructor
+     */
     agent_base(const agent_base&) = delete;
 
+    /**
+     * Deleted copy assignment operator
+     */    
     void operator=(const agent_base&) = delete;
 
+    
+    /**
+     * Destructor
+     */
     // virtual is unnecessary
     ~agent_base() STATICLIB_NOEXCEPT {
         sl::jni::static_java_vm().notify_shutdown();
         worker.join();
     }
 
+    /**
+     * This method returns a set of JVMTI capabilities, required
+     * by agent. Returns empty set by default, can be overridden 
+     * by agent.
+     * 
+     * @return set of required JVMTI capabilities
+     */
     std::unique_ptr<jvmtiCapabilities> capabilities() {
         auto caps = sl::support::make_unique<jvmtiCapabilities>();
         std::memset(caps.get(), 0, sizeof (*caps));
