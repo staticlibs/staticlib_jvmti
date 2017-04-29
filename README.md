@@ -17,7 +17,7 @@ Link to the [API documentation](http://staticlibs.github.io/staticlib_jvmti/docs
 License information
 -------------------
 
-This project is released under the GNU General Public License, version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
+This project is released under the [GNU General Public License, version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html).
 
 Changelog
 ---------
