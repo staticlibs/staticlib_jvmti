@@ -51,7 +51,9 @@ if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
             ${JAVA_HOME}/include/linux )
 elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
-            ${JAVA_HOME}/include/windows )
+            ${JAVA_HOME}/include/win32 )
+    target_link_libraries ( ${PROJECT_NAME}
+            ${JAVA_HOME}/lib/jvm.lib )            
 elseif ( STATICLIB_TOOLCHAIN MATCHES "macosx_[^_]+_[^_]+" )
     target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
             ${JAVA_HOME}/include/macosx )
