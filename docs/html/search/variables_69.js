@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['ids',['ids',['../structjmmInterface__1__.html#ac3c136f8d621009809ead0f15e81a160',1,'jmmInterface_1_']]],
+  ['impact',['impact',['../structdcmdInfo.html#a8e693f960ef0abaa44cbbf9abc307e89',1,'dcmdInfo']]],
+  ['infoarray',['infoArray',['../structjmmInterface__1__.html#a695c4e697f4d29386ea3fab5d145fdba',1,'jmmInterface_1_::infoArray()'],['../structjmmInterface__1__.html#a197e8bd73ed48c04f6072112e3514a13',1,'jmmInterface_1_::infoArray()'],['../structjmmInterface__1__.html#aa001b6ba5cd277396dc2cb4f5b01f1e7',1,'jmmInterface_1_::infoArray()']]],
+  ['innerclasses',['innerclasses',['../structclass__size__info.html#a35e9cdc5a40a3832ec1ae6eb811be5cf',1,'class_size_info']]],
+  ['int',['int',['../structjmmOptionalSupport.html#a9d1fd99859907b305c3c098162229a6d',1,'jmmOptionalSupport::int()'],['../structjvm__version__info.html#a1f176fb95c9c09d88aa7a8533a2d7668',1,'jvm_version_info::int()'],['../structjdk__version__info.html#a06798d88a2c2b36f7d2b5cc4223aa1da',1,'jdk_version_info::int()']]],
+  ['interfaces',['interfaces',['../structclass__size__info.html#a0f423b663e5c23e3363d736d6daa657b',1,'class_size_info']]],
+  ['is_5fattach_5fsupported',['is_attach_supported',['../structjvm__version__info.html#afacf531f1650776d738b6313c2329315',1,'jvm_version_info']]],
+  ['isbootclasspathsupported',['isBootClassPathSupported',['../structjmmOptionalSupport.html#a3917ad14e819d05adfbb2e516aed90ae',1,'jmmOptionalSupport']]],
+  ['iscompilationtimemonitoringsupported',['isCompilationTimeMonitoringSupported',['../structjmmOptionalSupport.html#a4faf1e6942fbbf163dd45ca6405c6e3c',1,'jmmOptionalSupport']]],
+  ['iscurrentthreadcputimesupported',['isCurrentThreadCpuTimeSupported',['../structjmmOptionalSupport.html#a6197a6b1a016526c0c98047e1051dc34',1,'jmmOptionalSupport']]],
+  ['islowmemorydetectionsupported',['isLowMemoryDetectionSupported',['../structjmmOptionalSupport.html#a8f0adfc052a0d8539b1e37987818b945',1,'jmmOptionalSupport']]],
+  ['isobjectmonitorusagesupported',['isObjectMonitorUsageSupported',['../structjmmOptionalSupport.html#a8847421b34565dababde273522ff2d6e',1,'jmmOptionalSupport']]],
+  ['isotherthreadcputimesupported',['isOtherThreadCpuTimeSupported',['../structjmmOptionalSupport.html#a6448fe82ea5237b3984ecb988292a65d',1,'jmmOptionalSupport']]],
+  ['isremotediagnosticcommandssupported',['isRemoteDiagnosticCommandsSupported',['../structjmmOptionalSupport.html#ac67659eb802f9ffad50541b834722ef9',1,'jmmOptionalSupport']]],
+  ['issynchronizerusagesupported',['isSynchronizerUsageSupported',['../structjmmOptionalSupport.html#a968771275c3627a7dfb2b86604a43a01',1,'jmmOptionalSupport']]],
+  ['isthreadallocatedmemorysupported',['isThreadAllocatedMemorySupported',['../structjmmOptionalSupport.html#a3366c815e86a0d5aba0b5a1b8cacd3d7',1,'jmmOptionalSupport']]],
+  ['isthreadcontentionmonitoringsupported',['isThreadContentionMonitoringSupported',['../structjmmOptionalSupport.html#a80a2c29717f9878ab7f02f9da6fb76b5',1,'jmmOptionalSupport']]]
+];
