@@ -25,6 +25,7 @@
 #include <string>
 #include <thread>
 
+#include "staticlib/config/os.hpp"
 // http://stackoverflow.com/q/4845198/314015
 #ifdef STATICLIB_WINDOWS
 #define WIN32_LEAN_AND_MEAN
