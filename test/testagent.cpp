@@ -21,12 +21,6 @@
 
 #include "staticlib/config.hpp"
 
-#ifdef STATICLIB_WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <windows.h>
-#endif // STATICLIB_WINDOWS
-
 #include "staticlib/jvmti/agent_base.hpp"
 
 #include <iostream>
