@@ -50,9 +50,9 @@ namespace jvmti {
 
 /**
  * Base class template for JVMTI agents. Needs to be inherited using CRTP.
- * Inheritor needs to implement `operator()` and optionally `capabilities()` method.
+ * Inheritor needs to implement `operator()` and optionally `capabilities()` and `callbacks()` methods.
  * `operator()` will be called after full JVM initialization from spawned thread
- * that is already attached to JVM. On shutdow all threads, possibly spawned by inheritor,
+ * that is already attached to JVM. On shutdown all threads, possibly spawned by inheritor,
  * must be joined before exiting `operator()` method.
  */
 template<typename T> class agent_base {
@@ -91,9 +91,9 @@ protected:
     jvmti(),
     jmm(nullptr),
     options(nullptr != options ? options : "") {
-        // init global jvm pointer        
-        register_vminit_callback();
+        // init global jvm pointer
         apply_capabilities();
+        register_vminit_callback();
         // start worker
         this->worker = std::thread([this] {
             // wait for init
@@ -143,8 +143,20 @@ protected:
         return caps;
     }
 
-private:
+    /**
+     * This method returns a set of JVMTI callbacks, registered
+     * by agent. Returns empty set by default, can be overridden 
+     * by agent.
+     * 
+     * @return set of required JVMTI capabilities
+     */
+    std::unique_ptr<jvmtiEventCallbacks> callbacks() {
+        auto cbs = sl::support::make_unique<jvmtiEventCallbacks>();
+        std::memset(cbs.get(), 0, sizeof (*cbs));
+        return cbs;
+    }
 
+private:
     void apply_capabilities() {
         auto caps = static_cast<T*> (this)->capabilities();
         error_checker ec;
@@ -152,13 +164,12 @@ private:
     }
 
     void register_vminit_callback() {
-        jvmtiEventCallbacks cbs;
-        memset(std::addressof(cbs), 0, sizeof (cbs));
-        cbs.VMInit = [](jvmtiEnv*, JNIEnv*, jthread) {
+        auto cbs = static_cast<T*> (this)->callbacks();
+        cbs->VMInit = [](jvmtiEnv*, JNIEnv*, jthread) {
             sl::jni::static_java_vm().notify_init_complete();
         };
         error_checker ec;
-        ec = jvmti->SetEventCallbacks(std::addressof(cbs), sizeof (cbs));
+        ec = jvmti->SetEventCallbacks(cbs.get(), sizeof(jvmtiEventCallbacks));
         ec = jvmti->SetEventNotificationMode(JVMTI_ENABLE, JVMTI_EVENT_VM_INIT, nullptr);
     }
 };
